@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon src/app.ts",
     "build": "tsc",
-    "start": "node dist/app.js",
+    "start": "node app.js",
     "migration:generate": "drizzle-kit generate",
     "migration:push": "node -r esbuild-register src/config/migrate.ts",
     "migration:drop": "drizzle-kit drop"
