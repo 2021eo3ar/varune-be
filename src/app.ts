@@ -17,6 +17,7 @@ dotenv.config();
 const app = express();
 const port = envConfigs.port || 3000;
 
+app.set("trust proxy", 1);
 app.use( session({
     secret: "secret",
     resave: false,
