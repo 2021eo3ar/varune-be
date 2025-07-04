@@ -33,11 +33,22 @@ export default class UserService {
         grouped[chatId].push(chat);
       }
 
-      // Convert to array of { chatId, chats: [...] }
-      const result = Object.entries(grouped).map(([chatId, chats]) => ({
-        chatId,
-        chats,
-      }));
+      // Convert to array of { chatId, title, chats: [...] }
+      const result = Object.entries(grouped).map(([chatId, chats]) => {
+        // Try to get the title from the first message with a title
+        let title = '';
+        for (const msg of chats) {
+          if (msg.title) {
+            title = msg.title;
+            break;
+          }
+        }
+        return {
+          chatId,
+          title,
+          chats,
+        };
+      });
       return result;
     } catch (error) {
       console.error("error occured while fetching chats:", error);

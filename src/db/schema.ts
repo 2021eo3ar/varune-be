@@ -37,6 +37,7 @@ export const chats = pgTable("chats", {
   // New fields for chat continuity
   parentMessageId: varchar("parent_message_id", { length: 36 }), // UUID of previous message
   messageRole: varchar("message_role", { length: 16 }), // 'user' or 'assistant'
+  title: varchar("title", { length: 255 }), // Chat title for sidebar
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
-import { BrandNarrativeParams, buildPrompt } from "../utils/promptBuilder";
+import { BrandNarrativeParams, buildPrompt, extractTitle } from "../utils/promptBuilder";
 import { generateNarrativeFromGroq } from "../utils/groqUtil";
 import { chats } from "../db/schema";
 import { eq } from "drizzle-orm";
@@ -159,9 +159,13 @@ export default class NarrativeController {
         origTask,
         newInstruction,
       );
+
       const response = await generateNarrativeFromGroq(prompt);
+      // Extract title for the chat (for sidebar)
+      const chatTitle = extractTitle(response);
 
       // Save user message first, get its id, then save assistant message with that as parent
+
       const [userMsgRow] = await postgreDb
         .insert(chats)
         .values([
@@ -175,6 +179,7 @@ export default class NarrativeController {
             publicId: existingUser.publicId,
             parentMessageId: lastMessageId || parentMessageId || null,
             messageRole: "user",
+            title: chatTitle, // Save the title with the first user message
           },
         ])
         .returning();
@@ -189,6 +194,7 @@ export default class NarrativeController {
           publicId: existingUser.publicId,
           parentMessageId: userMsgId,
           messageRole: "assistant",
+          title: chatTitle, // Save the title with the assistant message too
         },
       ]);
 
@@ -436,7 +442,7 @@ export default class NarrativeController {
       return res.status(200).json({
         success: true,
         message: "User's chats found successfully",
-        allChats,
+        allChats, // Each chat object now includes a 'title' field for sidebar display
       });
     } catch (error) {
       console.error("internal server error occured: ", error);
