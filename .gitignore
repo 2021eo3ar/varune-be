@@ -1,0 +1,13 @@
+.env
+node_modules
+logs
+app.log
+views
+.env.example
+dist
+.env.test
+.env.local
+.env.development
+.env.production
+.env.staging
+.vscode
