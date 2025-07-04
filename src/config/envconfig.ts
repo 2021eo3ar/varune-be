@@ -17,7 +17,8 @@ const envVarsSchema = z.object({
   GOOGLE_CLIENT_SECRET: z.string(),
   GOOGLE_CALLBACK_URL: z.string(),
   CLIENT_REDIRECT_URL: z.string().optional(),
-  GROQ_API: z.string().optional()
+  GROQ_API: z.string().optional(),
+  NODE_ENV: z.string().optional()
 });
 
 const envVars = envVarsSchema.parse(process.env);
@@ -30,5 +31,6 @@ export const envConfigs = {
    GOOGLE_CLIENT_SECRET: envVars.GOOGLE_CLIENT_SECRET,
    GOOGLE_CALLBACK_URL: envVars.GOOGLE_CALLBACK_URL,
    CLIENT_REDIRECT_URL: envVars.CLIENT_REDIRECT_URL,
-   GROQ_API: envVars.GROQ_API 
+   GROQ_API: envVars.GROQ_API,
+   NODE_ENV: envVars.NODE_ENV,
 };
