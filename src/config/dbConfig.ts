@@ -29,6 +29,8 @@ pool
   });
 
 // Use the pool with Drizzle
+
 const postgreDb = drizzle(pool, { schema: { ...schema } });
 
 export default postgreDb;
+export { pool };

@@ -1,6 +1,6 @@
 import 'dotenv/config'; // Load environment variables from .env file
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
-import postgreDb, {client} from './dbConfig';
+import postgreDb, { pool } from './dbConfig';
 
 async function migrateData() {
   try {
@@ -11,7 +11,7 @@ async function migrateData() {
     console.error("Migration failed:", error);
   } finally {
     // Ensure the database connection is closed
-    await client.end();
+    await pool.end();
     console.log("Database connection closed.");
   }
 }
