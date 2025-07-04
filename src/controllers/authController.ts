@@ -5,6 +5,10 @@ import { UserService } from "../services";
 import { generateAuthTokens } from "../config/token";
 import { OAuth2Client } from "google-auth-library";
 import { envConfigs } from "../config/envconfig";
+import dotenv from "dotenv";
+dotenv.config();
+
+console.log(process.env.NODE_ENV, "NODE_ENV");
 export default class authController {
   // Helper for cookie options
   static getCookieOptions(): import("express").CookieOptions {
