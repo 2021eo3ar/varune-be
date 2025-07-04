@@ -4,6 +4,7 @@ import { envConfigs } from "../config/envconfig";
 const allowedOrigins = [
   "http://localhost:5173",
   envConfigs.CLIENT_REDIRECT_URL,
+  "https://varune-fe.vercel.app"
 ];
 const corsOptions: CorsOptions = {
   origin: function (origin, callback) {
