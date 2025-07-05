@@ -74,7 +74,8 @@ export default class authController {
         httpOnly: false,
       });
       console.log(envConfigs.CLIENT_REDIRECT_URL,"client redirect url")
-      return res.redirect(envConfigs.CLIENT_REDIRECT_URL);
+     const redirectUrl = `${envConfigs.CLIENT_REDIRECT_URL}?accessToken=${accessToken}&user=${encodeURIComponent(JSON.stringify(responseUser))}`;
+return res.redirect(redirectUrl);
     } catch (error) {
       console.error("Error in googleCallback:", error);
       return res
