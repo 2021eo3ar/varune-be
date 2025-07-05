@@ -41,6 +41,7 @@ app.use(cookieParser());
 //   origin: envConfigs.clientUrl,
 //   credentials: true,
 // }));
+app.use(corsMiddleware);
 
 // Auth setup
 app.use(passport.initialize());
