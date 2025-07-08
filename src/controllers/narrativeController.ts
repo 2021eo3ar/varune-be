@@ -94,9 +94,6 @@ export default class NarrativeController {
           .json({ success: false, message: "User not found" });
       }
 
-      // Reset credits if 24 hours have passed since last reset
-      existingUser = await UserService.resetCreditsIfNeeded(existingUser);
-
       let chatHistory: any[] = [];
       let newChatId = chatId || uuidv4();
       let origTask = originalTask;
@@ -224,16 +221,19 @@ export default class NarrativeController {
         .json({ success: false, message: "Internal server error" });
     }
   };
+
   // API to fetch user's credits and info
   static getUserCredits = async (req: Request, res: Response): Promise<any> => {
     try {
       const { email } = req.user as { email: string };
-      const user = await UserService.getUser(email);
+      let user = await UserService.getUser(email);
       if (!user) {
         return res
           .status(404)
           .json({ success: false, message: "User not found" });
       }
+      // Reset credits if 24 hours have passed since last reset
+      user = await UserService.resetCreditsIfNeeded(user);
       return res.status(200).json({
         success: true,
         data: {
@@ -243,7 +243,6 @@ export default class NarrativeController {
           email: user.email,
           publicId: user.publicId,
           profileImage: user.profileImage,
-          createdAt:user.createdAt,
         },
       });
     } catch (err) {
@@ -296,68 +295,6 @@ export default class NarrativeController {
           message: "Could not extract original task from chat history",
         });
       }
-
-      // // Try to extract parameters from the original task (assume it's a JSON string or object)
-      // let params: any = {};
-      // try {
-      //   params = typeof origTask === "string" ? JSON.parse(origTask) : origTask;
-      // } catch (e) {
-      //   // If not JSON, try to parse as prompt string (fallback: error)
-      //   return res.status(400).json({
-      //     success: false,
-      //     message:
-      //       "Original task is not in a valid format to extract parameters",
-      //   });
-      // }
-
-      // Extract all possible parameters (fallback to empty string/array if missing)
-      // const {
-      //   industry = "",
-      //   brandValues = [],
-      //   targetAudience = "",
-      //   brandMission = "",
-      //   brandVision = "",
-      //   usp = "",
-      //   brandPersonality = "",
-      //   toneOfVoice = "",
-      //   keyProducts = [],
-      //   brandStory = "",
-      //   narrativeLength = "short",
-      // } = params;
-
-      // Prepare prompt params
-      // const safeBrandValues = Array.isArray(brandValues)
-      //   ? brandValues
-      //   : [brandValues];
-      // const safeKeyProducts = Array.isArray(keyProducts) ? keyProducts : [];
-      // const promptParams: BrandNarrativeParams =
-      //   narrativeLength === "short"
-      //     ? {
-      //         industry,
-      //         brandValues: safeBrandValues,
-      //         targetAudience,
-      //         brandMission,
-      //         brandVision: "",
-      //         usp,
-      //         brandPersonality: "",
-      //         toneOfVoice: "",
-      //         keyProducts: [],
-      //         brandStory: "",
-      //         narrativeLength: "short",
-      //       }
-      //     : {
-      //         industry,
-      //         brandValues: safeBrandValues,
-      //         targetAudience,
-      //         brandMission,
-      //         brandVision,
-      //         usp,
-      //         brandPersonality,
-      //         toneOfVoice,
-      //         keyProducts: safeKeyProducts,
-      //         brandStory,
-      //         narrativeLength: "long",
-      //       };
 
       // Build prompt with all context (originalTask, chatHistory, newInstruction)
       const prompt = buildPrompt(

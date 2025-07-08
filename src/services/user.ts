@@ -66,7 +66,7 @@ export default class UserService {
     }
   };
 
-  static resetCreditsIfNeeded = async (user: any, dailyLimit = 10) => {
+  static resetCreditsIfNeeded = async (user: any, dailyLimit = 50) => {
     const now = new Date();
     const lastReset = user.lastCreditReset ? new Date(user.lastCreditReset) : null;
     // Reset if never set or more than 24 hours have passed
