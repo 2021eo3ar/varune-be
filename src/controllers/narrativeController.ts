@@ -243,6 +243,7 @@ export default class NarrativeController {
           email: user.email,
           publicId: user.publicId,
           profileImage: user.profileImage,
+          createdAt : user.createdAt
         },
       });
     } catch (err) {
