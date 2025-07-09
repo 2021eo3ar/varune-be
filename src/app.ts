@@ -17,8 +17,6 @@ dotenv.config();
 const app = express();
 const port = envConfigs.port || 3000;
 
-app.set("trust proxy", 1); // required on Render
-
 // Secure session cookie setup
 app.use(session({
   secret: "defaultsecret",
@@ -36,11 +34,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// // ✅ Replace custom cors with proper config
-// app.use(cors({
-//   origin: envConfigs.clientUrl,
-//   credentials: true,
-// }));
 app.use(corsMiddleware);
 
 // Auth setup

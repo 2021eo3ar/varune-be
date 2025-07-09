@@ -1,0 +1,25 @@
+{
+    "$schema": "https://openapi.vercel.sh/vercel.json",
+    "version": 2,
+    "builds": [
+      {
+        "src": "src/app.ts",
+        "use": "@vercel/node",
+        "config": {
+          "maxLambdaSize": "50mb"
+        }
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "/src/app.ts"
+      }
+    ],
+    "env": {
+      "DATABASE_URL": "@database_url",
+      "POSTGRES_URL": "@database_url",
+      "NODE_ENV": "production"
+    }
+  }
+  
