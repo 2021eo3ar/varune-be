@@ -135,7 +135,7 @@ MIT License
 
 ## 🌐 Live Backend (Demo)
 
-> [live backend url](https://varune-be.onrender.com)
+> [live backend url](https://varune-be.vercel.app/)
 
 ---
 
